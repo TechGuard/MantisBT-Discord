@@ -1,0 +1,49 @@
+<?php
+/**
+ * Slack Integration
+ * Copyright (C) 2014 Karim Ratib (karim@meedan.com)
+ *
+ * Slack Integration is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2
+ * as published by the Free Software Foundation.
+ *
+ * Slack Integration is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Slack Integration; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * or see http://www.gnu.org/licenses/.
+ *
+ */
+
+$s_plugin_Discord_ = '';
+$s_plugin_Discord_title = 'Discord-интеграция';
+$s_plugin_Discord_description = 'Добавить интеграцию со Discord в Mantis.';
+$s_plugin_Discord_config = 'Настройка';
+$s_plugin_Discord_url_webhook = 'Discord Webhook URL по умолчанию';
+$s_plugin_Discord_url_webhooks = 'Доплнительные Discord Webhook URLы';
+$s_plugin_Discord_bot_name = 'Имя Discord-бота';
+$s_plugin_Discord_bot_icon = 'Иконка Discord-бота';
+$s_plugin_Discord_skip_bulk = 'Пропускать оповещения о групповых действиях';
+$s_plugin_Discord_link_names = 'Делать имена пользователей ссылками (это может привести к большому количеству оповещений Discord)';
+$s_plugin_Discord_default_channel = 'Каналы Discord по умолчанию';
+$s_plugin_Discord_channels = 'Каналы Discord';
+$s_plugin_Discord_usernames = 'Пользователи Discord';
+$s_plugin_Discord_columns = 'Колонки Discord';
+$s_plugin_Discord_bug_created = '[%s] %s создал <%s|%s>.';
+$s_plugin_Discord_bug_updated = '[%s] %s изменил <%s|%s>.';
+$s_plugin_Discord_bug_deleted = '[%s] %s удалил %s.';
+$s_plugin_Discord_bugnote_created = "[%s] %s прокомментировал <%s|%s>:";
+$s_plugin_Discord_bugnote_updated = "[%s] %s изменил комментарий к <%s|%s>:";
+$s_plugin_Discord_bugnote_deleted = "[%s] %s удалил комментарий к <%s|%s>.";
+$s_plugin_Discord_no_user = '(никто)';
+$s_plugin_Discord_unknown_field = '(не знаю, как выводить поле "%s")';
+$s_plugin_Discord_skip = 'Пропустить оповещение в Discord';
+$s_plugin_Discord_action_update = 'Обновить';
+
+$MANTIS_ERROR['plugin_Discord_ERROR_NO_CURL'] = 'Discord-плагин требует PHP-расширение cURL (http://php.net/curl)';
+$MANTIS_ERROR['plugin_Discord_ERROR_PHP_VERSION'] = 'Discord-плагин требует PHP 5.3.0 или больше';
+$MANTIS_ERROR['plugin_Discord_ERROR_CURL'] = 'Не прошёл запрос к Discord.  Проверьте свой webhook URL.  Также убедитесь, что настройки имени и иконки бота не содержат необычных символов.  Больше деталей может быть ниже.';
