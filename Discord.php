@@ -212,7 +212,36 @@ class DiscordPlugin extends MantisPlugin
 
 	function get_attachment($bug)
 	{
-		$attachment = array('fallback' => '', 'color' => '#3AA3E3', 'mrkdwn_in' => array('pretext', 'text', 'fields'));
+		if($bug->status == FEEDBACK)
+		{
+			$color = '#75507b';
+		}
+		else if($bug->status == ACKNOWLEDGED)
+		{
+			$color = '#f57900';
+		}
+		else if($bug->status == CONFIRMED)
+		{
+			$color = '#fce94f';
+		}
+		else if($bug->status == ASSIGNED)
+		{
+			$color = '#729fcf';
+		}
+		else if($bug->status == RESOLVED)
+		{
+			$color = '#8ae234';
+		}
+		else if($bug->status == CLOSED)
+		{
+			$color = '#8ae234';
+		}
+		else
+		{
+			$color = '#ef2929';
+		}
+		
+		$attachment = array('fallback' => '', 'color' => $color, 'mrkdwn_in' => array('pretext', 'text', 'fields'));
 		$t_columns  = (array) plugin_config_get('columns');
 		foreach($t_columns as $t_column)
 		{
@@ -403,5 +432,5 @@ class DiscordPlugin extends MantisPlugin
 		}
 		return $username;
 	}
-	
+
 }
