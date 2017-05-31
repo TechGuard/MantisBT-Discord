@@ -118,7 +118,7 @@ print_manage_menu( 'manage_plugin_page.php' );
             $t_all = implode( ', ', $t_columns );
           ?>
           Available column names are:<div><textarea name="all_columns" readonly="readonly" cols="80" rows="5"><?php echo $t_all ?></textarea></div>
-          The current value of this option is:<pre><?php var_export(plugin_config_get( 'columns' ))?></pre>
+          The current value of this option is:<pre><?php echo preg_replace('/[0-9]+ => /', '', var_export(plugin_config_get( 'columns' ), true)) ?></pre>
         </p>
       </td>
     </tr>
