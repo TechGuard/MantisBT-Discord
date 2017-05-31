@@ -92,6 +92,17 @@ print_manage_menu( 'manage_plugin_page.php' );
     </tr>
 
     <tr>
+        <td class="category">
+            <?php echo lang_get( 'language' ) ?>
+        </td>
+        <td>
+            <select id="language" name="language" class="input-sm">
+                <?php print_language_option_list( plugin_config_get('language') ) ?>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
       <td class="category">
         <?php echo plugin_lang_get( 'columns' )?>
       </td>

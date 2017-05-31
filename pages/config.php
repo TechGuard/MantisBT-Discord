@@ -44,6 +44,7 @@ layout_page_begin();
 config_set_if_needed('url_webhook', gpc_get_string('url_webhook'));
 config_set_if_needed('skip_bulk', gpc_get_bool('skip_bulk'));
 config_set_if_needed('link_names', gpc_get_bool('link_names'));
+config_set_if_needed('language', gpc_get_string('language'));
 
 form_security_purge('plugin_Discord_config');
 

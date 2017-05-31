@@ -57,11 +57,13 @@ class DiscordPlugin extends MantisPlugin
 
 	function config()
 	{
+
 		return array(
 			'url_webhooks'    => array(),
 			'url_webhook'     => '',
 			'skip_bulk'       => true,
 			'link_names'      => true,
+			'language'        => 'english',
 			'usernames'       => array(),
 			'columns'         => array(
 				'status',
@@ -105,6 +107,7 @@ class DiscordPlugin extends MantisPlugin
 
 	function bug_report_update($event, $bug, $bug_id)
 	{
+		lang_push( plugin_config_get('language') );
 		$this->skip = $this->skip || gpc_get_bool('slack_skip') || $bug->view_state == VS_PRIVATE;
 		$project  = project_get_name($bug->project_id);
 		$url      = string_get_bug_view_url_with_fqdn($bug_id);
@@ -115,6 +118,7 @@ class DiscordPlugin extends MantisPlugin
 			$project, $reporter, $url, $summary, $handler
 		);
 		$this->notify($msg, $this->get_webhook($project), $this->get_attachment($bug));
+		lang_pop();
 	}
 
 	function bug_report($event, $bug, $bug_id)
@@ -139,6 +143,7 @@ class DiscordPlugin extends MantisPlugin
 
 	function bug_deleted($event, $bug_id)
 	{
+		lang_push( plugin_config_get('language') );
 		$bug = bug_get($bug_id);
 		$this->skip = $this->skip || gpc_get_bool('slack_skip') || $bug->view_state == VS_PRIVATE;
 		$project  = project_get_name($bug->project_id);
@@ -146,10 +151,12 @@ class DiscordPlugin extends MantisPlugin
 		$summary  = $this->format_summary($bug);
 		$msg      = sprintf(plugin_lang_get('bug_deleted'), $project, $reporter, $summary);
 		$this->notify($msg, $this->get_webhook($project));
+		lang_pop();
 	}
 
 	function bugnote_add_edit($event, $bug_id, $bugnote_id)
 	{
+		lang_push( plugin_config_get('language') );
 		$bug     = bug_get($bug_id);
 		$bugnote = bugnote_get($bugnote_id);
 		$this->skip = $this->skip || gpc_get_bool('slack_skip') || $bug->view_state == VS_PRIVATE || $bugnote->view_state == VS_PRIVATE;
@@ -162,6 +169,7 @@ class DiscordPlugin extends MantisPlugin
 			$project, $reporter, $url, $summary
 		);
 		$this->notify($msg, $this->get_webhook($project), $this->get_text_attachment($this->bbcode_to_slack($note)));
+		lang_pop();
 	}
 
 	function get_text_attachment($text)
@@ -175,6 +183,7 @@ class DiscordPlugin extends MantisPlugin
 
 	function bugnote_deleted($event, $bug_id, $bugnote_id)
 	{
+		lang_push( plugin_config_get('language') );
 		$bug     = bug_get($bug_id);
 		$bugnote = bugnote_get($bugnote_id);
 		$this->skip = $this->skip || gpc_get_bool('slack_skip') || $bug->view_state == VS_PRIVATE || $bugnote->view_state == VS_PRIVATE;
@@ -184,6 +193,7 @@ class DiscordPlugin extends MantisPlugin
 		$reporter = $this->get_user_name(auth_get_current_user_id());
 		$msg      = sprintf(plugin_lang_get('bugnote_deleted'), $project, $reporter, $url, $summary);
 		$this->notify($msg, $this->get_webhook($project));
+		lang_pop();
 	}
 
 	function format_summary($bug)
@@ -393,4 +403,5 @@ class DiscordPlugin extends MantisPlugin
 		}
 		return $username;
 	}
+	
 }
