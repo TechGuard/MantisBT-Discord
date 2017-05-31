@@ -1,19 +1,20 @@
 <?php
 /**
- * Slack Integration
- * Copyright (C) Karim Ratib (karim@meedan.com)
+ * Discord Integration
+ * Copyright (C) Robin van Nunen (robin@vnunen.nl) for Discord modification
+ * Copyright (C) Karim Ratib (karim@meedan.com) for original source
  *
- * Slack Integration is free software; you can redistribute it and/or
+ * Discord Integration is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2
  * as published by the Free Software Foundation.
  *
- * Slack Integration is distributed in the hope that it will be useful,
+ * Discord Integration is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Slack Integration; if not, write to the Free Software
+ * along with Discord Integration; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  * or see http://www.gnu.org/licenses/.
  */
@@ -59,19 +60,15 @@ class DiscordPlugin extends MantisPlugin
 		return array(
 			'url_webhooks'    => array(),
 			'url_webhook'     => '',
-			'bot_name'        => 'mantis',
-			'bot_icon'        => '',
 			'skip_bulk'       => true,
-			'link_names'      => false,
-			'channels'        => array(),
-			'default_channel' => '#general',
+			'link_names'      => true,
 			'usernames'       => array(),
 			'columns'         => array(
 				'status',
 				'handler_id',
-				'target_version',
 				'priority',
 				'severity',
+				'description',
 			),
 		);
 	}
@@ -113,10 +110,11 @@ class DiscordPlugin extends MantisPlugin
 		$url      = string_get_bug_view_url_with_fqdn($bug_id);
 		$summary  = $this->format_summary($bug);
 		$reporter = $this->get_user_name(auth_get_current_user_id());
+		$handler  = $this->format_value($bug, 'handler_id');
 		$msg      = sprintf(plugin_lang_get($event === 'EVENT_REPORT_BUG' ? 'bug_created' : 'bug_updated'),
-			$project, $reporter, $url, $summary
+			$project, $reporter, $url, $summary, $handler
 		);
-		$this->notify($msg, $this->get_webhook($project), $this->get_channel($project), $this->get_attachment($bug));
+		$this->notify($msg, $this->get_webhook($project), $this->get_attachment($bug));
 	}
 
 	function bug_report($event, $bug, $bug_id)
@@ -147,7 +145,7 @@ class DiscordPlugin extends MantisPlugin
 		$reporter = $this->get_user_name(auth_get_current_user_id());
 		$summary  = $this->format_summary($bug);
 		$msg      = sprintf(plugin_lang_get('bug_deleted'), $project, $reporter, $summary);
-		$this->notify($msg, $this->get_webhook($project), $this->get_channel($project));
+		$this->notify($msg, $this->get_webhook($project));
 	}
 
 	function bugnote_add_edit($event, $bug_id, $bugnote_id)
@@ -163,13 +161,13 @@ class DiscordPlugin extends MantisPlugin
 		$msg      = sprintf(plugin_lang_get($event === 'EVENT_BUGNOTE_ADD' ? 'bugnote_created' : 'bugnote_updated'),
 			$project, $reporter, $url, $summary
 		);
-		$this->notify($msg, $this->get_webhook($project), $this->get_channel($project), $this->get_text_attachment($this->bbcode_to_slack($note)));
+		$this->notify($msg, $this->get_webhook($project), $this->get_text_attachment($this->bbcode_to_slack($note)));
 	}
 
 	function get_text_attachment($text)
 	{
 		$attachment             = array('color' => '#3AA3E3', 'mrkdwn_in' => array('pretext', 'text', 'fields'));
-		$attachment['fallback'] = text . "\n";
+		$attachment['fallback'] = "$text\n";
 		$attachment['text']     = $text;
 
 		return $attachment;
@@ -185,7 +183,7 @@ class DiscordPlugin extends MantisPlugin
 		$summary  = $this->format_summary($bug);
 		$reporter = $this->get_user_name(auth_get_current_user_id());
 		$msg      = sprintf(plugin_lang_get('bugnote_deleted'), $project, $reporter, $url, $summary);
-		$this->notify($msg, $this->get_webhook($project), $this->get_channel($project));
+		$this->notify($msg, $this->get_webhook($project));
 	}
 
 	function format_summary($bug)
@@ -229,8 +227,8 @@ class DiscordPlugin extends MantisPlugin
         $values = array(
             'id' => function($bug) { return sprintf('<%s|%s>', string_get_bug_view_url_with_fqdn($bug->id), $bug->id); },
             'project_id' => function($bug) { return project_get_name($bug->project_id); },
-            'reporter_id' => function($bug) { return $this->get_user_name($bug->reporter_id); },
-            'handler_id' => function($bug) { return empty($bug->handler_id) ? plugin_lang_get('no_user') : $this->get_user_name($bug->handler_id); },
+            'reporter_id' => function($bug) { return $this->get_user_name($bug->reporter_id, true); },
+            'handler_id' => function($bug) { return empty($bug->handler_id) ? plugin_lang_get('no_user') : $this->get_user_name($bug->handler_id, true); },
             'duplicate_id' => function($bug) { return sprintf('<%s|%s>', string_get_bug_view_url_with_fqdn($bug->duplicate_id), $bug->duplicate_id); },
             'priority' => function($bug) { return get_enum_element( 'priority', $bug->priority ); },
             'severity' => function($bug) { return get_enum_element( 'severity', $bug->severity ); },
@@ -279,13 +277,6 @@ class DiscordPlugin extends MantisPlugin
 	    }
     }
 
-	function get_channel($project)
-	{
-		$channels = plugin_config_get('channels');
-
-		return array_key_exists($project, $channels) ? $channels[ $project ] : plugin_config_get('default_channel');
-	}
-
 	function get_webhook($project)
 	{
 		$webhooks = plugin_config_get('url_webhooks');
@@ -293,13 +284,9 @@ class DiscordPlugin extends MantisPlugin
 		return array_key_exists($project, $webhooks) ? $webhooks[ $project ] : plugin_config_get('url_webhook');
 	}
 
-	function notify($msg, $webhook, $channel, $attachment = false)
+	function notify($msg, $webhook, $attachment = false)
 	{
 		if($this->skip)
-		{
-			return;
-		}
-		if(empty($channel))
 		{
 			return;
 		}
@@ -307,32 +294,19 @@ class DiscordPlugin extends MantisPlugin
 		{
 			return;
 		}
-		$ch = curl_init();
-		// @see https://my.slack.com/services/new/incoming-webhook
-		// remove istance and token and add plugin_Discord_url config , see configurations with url above
 		$url = sprintf('%s', trim($webhook));
+		if(substr($url, -strlen('/slack')) != '/slack')
+		{
+			$url .= '/slack';
+		}
+
+		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$payload  = array(
-			'channel'    => $channel,
-			'username'   => plugin_config_get('bot_name'),
-			'text'       => $msg,
-			'link_names' => plugin_config_get('link_names'),
+			'text' => $msg,
 		);
-		$bot_icon = trim(plugin_config_get('bot_icon'));
-		if(empty($bot_icon))
-		{
-			$payload['icon_url'] = 'https://raw.githubusercontent.com/TechGuard/MantisBT-Discord/master/mantis_logo.png';
-		}
-		elseif(preg_match('/^:[a-z0-9_\-]+:$/i', $bot_icon))
-		{
-			$payload['icon_emoji'] = $bot_icon;
-		}
-		elseif($bot_icon)
-		{
-			$payload['icon_url'] = trim($bot_icon);
-		}
 		if($attachment)
 		{
 			$payload['attachments'] = array($attachment);
@@ -404,13 +378,19 @@ class DiscordPlugin extends MantisPlugin
 	    return $bbtext;
     }
 
-	function get_user_name($user_id)
+	function get_user_name($user_id, $discord = false)
 	{
 		$user      = user_get_row($user_id);
 		$username  = $user['username'];
+		if(!$discord || !plugin_config_get('link_names'))
+		{
+			return $username;
+		}
 		$usernames = plugin_config_get('usernames');
-		$username  = array_key_exists($username, $usernames) ? $usernames[ $username ] : $username;
-
-		return '@' . $username;
+		if(array_key_exists($username, $usernames))
+		{
+			return '<@' . $usernames[$username] . '>';
+		}
+		return $username;
 	}
 }

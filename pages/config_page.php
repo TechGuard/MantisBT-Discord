@@ -1,19 +1,20 @@
 <?php
 /**
- * Slack Integration
- * Copyright (C) Karim Ratib (karim@meedan.com)
+ * Discord Integration
+ * Copyright (C) Robin van Nunen (robin@vnunen.nl) for Discord modification
+ * Copyright (C) Karim Ratib (karim@meedan.com) for original source
  *
- * Slack Integration is free software; you can redistribute it and/or
+ * Discord Integration is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2
  * as published by the Free Software Foundation.
  *
- * Slack Integration is distributed in the hope that it will be useful,
+ * Discord Integration is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Slack Integration; if not, write to the Free Software
+ * along with Discord Integration; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  * or see http://www.gnu.org/licenses/.
  */
@@ -74,28 +75,6 @@ print_manage_menu( 'manage_plugin_page.php' );
 
     <tr>
       <td class="category">
-        <?php echo plugin_lang_get( 'bot_name' )?>
-      </td>
-      <td  colspan="2">
-        <input type="text" name="bot_name" value="<?php echo plugin_config_get( 'bot_name' )?>" />
-      </td>
-    </tr>
-
-    <tr>
-      <td class="category">
-        <?php echo plugin_lang_get( 'bot_icon' )?>
-      </td>
-      <td  colspan="2">
-        <p>
-          Can be either a URL pointing to small image or an emoji of the form :emoji:</br>
-          Defaults to the Mantis logo.
-        </p>
-        <input type="text" name="bot_icon" value="<?php echo plugin_config_get( 'bot_icon' )?>" />
-      </td>
-    </tr>
-
-    <tr>
-      <td class="category">
         <?php echo plugin_lang_get( 'skip_bulk' )?>
       </td>
       <td  colspan="2">
@@ -109,31 +88,6 @@ print_manage_menu( 'manage_plugin_page.php' );
       </td>
       <td  colspan="2">
         <input type="checkbox" name="link_names" <?php if (plugin_config_get( 'link_names' )) echo "checked"; ?> />
-      </td>
-    </tr>
-
-    <tr>
-      <td class="category">
-        <?php echo plugin_lang_get( 'default_channel' )?>
-      </td>
-      <td  colspan="2">
-        <input type="text" name="default_channel" value="<?php echo plugin_config_get( 'default_channel' )?>" />
-      </td>
-    </tr>
-
-    <tr>
-      <td class="category">
-        <?php echo plugin_lang_get( 'channels' )?>
-      </td>
-      <td  colspan="2">
-        <p>
-          Specifies the mapping between Mantis project names and Discord #channels.
-        </p>
-        <p>
-          Option name is <strong>plugin_Discord_channels</strong> and is an array of 'Mantis project name' => 'Discord channel name'.
-          Array options must be set using the <a href="adm_config_report.php">Configuration Report</a> screen.
-          The current value of this option is:<pre><?php var_export(plugin_config_get( 'channels' ))?></pre>
-        </p>
       </td>
     </tr>
 
