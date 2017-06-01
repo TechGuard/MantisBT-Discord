@@ -103,6 +103,20 @@ print_manage_menu( 'manage_plugin_page.php' );
     </tr>
 
     <tr>
+        <td class="category">
+            <?php echo plugin_lang_get( 'actions' ) ?>
+        </td>
+        <td>
+            <?php
+            foreach(['hook_bug_report', 'hook_bug_update', 'hook_bug_deleted', 'hook_bug_action', 'hook_bugnote_add', 'hook_bugnote_edit', 'hook_bugnote_deleted'] as $name)
+            {
+                echo '<label><input type="checkbox" name="' . $name . '" '.(plugin_config_get( $name ) ? 'checked' : '').'/>'.$name.'</label>';
+            }
+            ?>
+        </td>
+    </tr>
+
+    <tr>
       <td class="category">
         <?php echo plugin_lang_get( 'columns' )?>
       </td>
