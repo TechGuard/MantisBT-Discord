@@ -49,7 +49,6 @@ config_set_if_needed('language', gpc_get_string('language'));
 config_set_if_needed('hook_bug_report', gpc_get_bool('hook_bug_report'));
 config_set_if_needed('hook_bug_update', gpc_get_bool('hook_bug_update'));
 config_set_if_needed('hook_bug_deleted', gpc_get_bool('hook_bug_deleted'));
-config_set_if_needed('hook_bug_action', gpc_get_bool('hook_bug_action'));
 config_set_if_needed('hook_bugnote_add', gpc_get_bool('hook_bugnote_add'));
 config_set_if_needed('hook_bugnote_edit', gpc_get_bool('hook_bugnote_edit'));
 config_set_if_needed('hook_bugnote_deleted', gpc_get_bool('hook_bugnote_deleted'));

@@ -57,7 +57,6 @@ class DiscordPlugin extends MantisPlugin
 
 	function config()
 	{
-
 		return array(
 			'url_webhooks'    => array(),
 			'url_webhook'     => '',
@@ -65,6 +64,12 @@ class DiscordPlugin extends MantisPlugin
 			'link_names'      => true,
 			'language'        => 'english',
 			'usernames'       => array(),
+            'hook_bug_report' => true,
+            'hook_bug_update' => true,
+            'hook_bug_deleted' => true,
+            'hook_bugnote_add' => true,
+            'hook_bugnote_edit' => true,
+            'hook_bugnote_deleted' => true,
 			'columns'         => array(
 				'status',
 				'handler_id',
@@ -123,12 +128,18 @@ class DiscordPlugin extends MantisPlugin
 
 	function bug_report($event, $bug, $bug_id)
 	{
-		$this->bug_report_update($event, $bug, $bug_id);
+        if(plugin_config_get('hook_bug_report', false))
+        {
+            $this->bug_report_update($event, $bug, $bug_id);
+        }
 	}
 
 	function bug_update($event, $bug_existing, $bug_updated)
 	{
-		$this->bug_report_update($event, $bug_updated, $bug_updated->id);
+        if(plugin_config_get('hook_bug_update', false))
+        {
+            $this->bug_report_update($event, $bug_updated, $bug_updated->id);
+        }
 	}
 
 	function bug_action($event, $action, $bug_id)
@@ -137,12 +148,17 @@ class DiscordPlugin extends MantisPlugin
 		if($action !== 'DELETE')
 		{
 			$bug = bug_get($bug_id);
-			$this->bug_report_update('EVENT_UPDATE_BUG', $bug, $bug_id);
+			$this->bug_update('EVENT_UPDATE_BUG', null, $bug);
 		}
 	}
 
 	function bug_deleted($event, $bug_id)
 	{
+        if(!plugin_config_get('hook_bug_deleted', false))
+        {
+            return;
+        }
+
 		lang_push( plugin_config_get('language') );
 		$bug = bug_get($bug_id);
 		$this->skip = $this->skip || gpc_get_bool('slack_skip') || $bug->view_state == VS_PRIVATE;
@@ -156,6 +172,12 @@ class DiscordPlugin extends MantisPlugin
 
 	function bugnote_add_edit($event, $bug_id, $bugnote_id)
 	{
+	    $type = ($event === 'EVENT_BUGNOTE_ADD') ? 'add' : 'edit';
+        if(!plugin_config_get('hook_bugnote_' . $type, false))
+        {
+            return;
+        }
+
 		lang_push( plugin_config_get('language') );
 		$bug     = bug_get($bug_id);
 		$bugnote = bugnote_get($bugnote_id);
@@ -183,6 +205,11 @@ class DiscordPlugin extends MantisPlugin
 
 	function bugnote_deleted($event, $bug_id, $bugnote_id)
 	{
+        if(!plugin_config_get('hook_bugnote_deleted', false))
+        {
+            return;
+        }
+
 		lang_push( plugin_config_get('language') );
 		$bug     = bug_get($bug_id);
 		$bugnote = bugnote_get($bugnote_id);

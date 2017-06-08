@@ -42,6 +42,16 @@ $s_plugin_Discord_no_user = '(no one)';
 $s_plugin_Discord_unknown_field = '(don\'t know how to render field "%s")';
 $s_plugin_Discord_skip = 'Skip Discord notification';
 $s_plugin_Discord_action_update = 'Update';
+$s_plugin_Discord_actions = 'Hook actions';
+$s_plugin_Discord_enabled = 'Enabled';
+$s_plugin_Discord_action = 'Action';
+
+$s_plugin_Discord_hook_bug_report = 'Report bug';
+$s_plugin_Discord_hook_bug_update = 'Update bug';
+$s_plugin_Discord_hook_bug_deleted = 'Delete bug';
+$s_plugin_Discord_hook_bugnote_add = 'Add comment';
+$s_plugin_Discord_hook_bugnote_edit = 'Edit comment';
+$s_plugin_Discord_hook_bugnote_deleted = 'Delete comment';
 
 $MANTIS_ERROR['plugin_Discord_ERROR_NO_CURL'] = 'The Discord plugin requires the cURL PHP extension (http://php.net/curl)';
 $MANTIS_ERROR['plugin_Discord_ERROR_PHP_VERSION'] = 'The Discord plugin requires PHP 5.3.0 or higher';
