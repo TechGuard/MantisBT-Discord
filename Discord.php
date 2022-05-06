@@ -370,6 +370,9 @@ class DiscordPlugin extends MantisPlugin
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		if ( trim($msg) == '' ){
+			$msg = '(empty message text)';
+		}
 		$payload  = array(
 			'text' => $msg,
 		);
@@ -382,8 +385,8 @@ class DiscordPlugin extends MantisPlugin
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 		$result = curl_exec($ch);
-		if($result !== 'ok')
-		{
+		// Only throw error if person has also configuration
+		if($result !== 'ok' && access_has_global_level(config_get( 'set_configuration_threshold'))) {
 			trigger_error(curl_errno($ch) . ': ' . curl_error($ch), E_USER_WARNING);
 			plugin_error('ERROR_CURL', E_USER_ERROR);
 		}
