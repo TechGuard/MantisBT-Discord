@@ -1,0 +1,58 @@
+<?php
+/**
+ * Slack Integration
+ * Copyright (C) 2014 Karim Ratib (karim.ratib@gmail.com)
+ *
+ * Slack Integration is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2
+ * as published by the Free Software Foundation.
+ *
+ * Slack Integration is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Slack Integration; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * or see http://www.gnu.org/licenses/.
+ */
+
+$s_plugin_Discord_ = '';
+$s_plugin_Discord_title = 'Discord - Integração';
+$s_plugin_Discord_description = 'Adicionar integração Discord ao Mantis.';
+$s_plugin_Discord_config = 'Configuração';
+$s_plugin_Discord_url_webhook = 'URL padrão Discord Webhook';
+$s_plugin_Discord_url_webhooks = 'URLs adicionais Discord Webhook ';
+$s_plugin_Discord_bot_name = 'Nome do Discord Bot';
+$s_plugin_Discord_bot_icon = 'Ícone do Discord Bot';
+$s_plugin_Discord_skip_bulk = 'Ignorar notificação sobre ações em massa';
+$s_plugin_Discord_link_names = 'Transforme nomes de usuário em links do Discord (pode causar excesso de notificações do Discord)';
+$s_plugin_Discord_default_channel = 'Canal Padrão do Discord';
+$s_plugin_Discord_channels = 'Canais Discord';
+$s_plugin_Discord_usernames = 'Usuários Discord';
+$s_plugin_Discord_columns = 'Colunas do Discord';
+$s_plugin_Discord_bug_created = '[%s] %s criado <%s|%s>. (%s)';
+$s_plugin_Discord_bug_updated = '[%s] %s atualizado <%s|%s>. (%s)';
+$s_plugin_Discord_bug_deleted = '[%s] %s apagado %s.';
+$s_plugin_Discord_bugnote_created = "[%s] %s comentou em <%s|%s> saying:";
+$s_plugin_Discord_bugnote_updated = "[%s] %s editou comentário em <%s|%s> saying:";
+$s_plugin_Discord_bugnote_deleted = "[%s] %s apagou comentário em <%s|%s>.";
+$s_plugin_Discord_no_user = '(indefinido)';
+$s_plugin_Discord_unknown_field = '(não sei renderizar o campo "%s")';
+$s_plugin_Discord_skip = 'Pular notificação Discord';
+$s_plugin_Discord_action_update = 'Atualizar';
+$s_plugin_Discord_actions = 'Ações Hook';
+$s_plugin_Discord_enabled = 'Ativado';
+$s_plugin_Discord_action = 'Ação';
+
+$s_plugin_Discord_hook_bug_report = 'Relatar bug';
+$s_plugin_Discord_hook_bug_update = 'Atualizar bug';
+$s_plugin_Discord_hook_bug_deleted = 'Apagar bug';
+$s_plugin_Discord_hook_bugnote_add = 'Adicionar comentário';
+$s_plugin_Discord_hook_bugnote_edit = 'Editar comentário';
+$s_plugin_Discord_hook_bugnote_deleted = 'Apagar comentário';
+
+$MANTIS_ERROR['plugin_Discord_ERROR_NO_CURL'] = 'O plugin Discord requer extenção cURL PHP (http://php.net/curl)';
+$MANTIS_ERROR['plugin_Discord_ERROR_PHP_VERSION'] = 'O plugin Discord requer PHP 5.3.0 ou superior';
+$MANTIS_ERROR['plugin_Discord_ERROR_CURL'] = 'A solicitação para o Discord não foi concluída. Verifique a URL do seu webhook. Verifique também se não há caracteres especiais no nome do bot ou nas configurações do ícone do bot. Mais detalhes podem ser vistos abaixo.';
