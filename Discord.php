@@ -170,7 +170,7 @@ class DiscordPlugin extends MantisPlugin
 		lang_pop();
 	}
 
-	function bugnote_add_edit($event, $bug_id, $bugnote_id)
+	function bugnote_add_edit($event, $bug_id, $bugnote_id, $files = null)
 	{
 	    $type = ($event === 'EVENT_BUGNOTE_ADD') ? 'add' : 'edit';
         if(!plugin_config_get('hook_bugnote_' . $type, false))
